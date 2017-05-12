@@ -1,0 +1,304 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		405E6EC51EC4B5A3007CBDE6 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405E6EC41EC4B5A3007CBDE6 /* main.swift */; };
+		405E6ECC1EC4B835007CBDE6 /* Polar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405E6ECB1EC4B835007CBDE6 /* Polar.swift */; };
+		405E6ECE1EC4B842007CBDE6 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405E6ECD1EC4B842007CBDE6 /* Network.swift */; };
+		405E6ED01EC4B870007CBDE6 /* PolarWorkoutsParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405E6ECF1EC4B870007CBDE6 /* PolarWorkoutsParser.swift */; };
+		405E6ED21EC5A55B007CBDE6 /* PolarWorkout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405E6ED11EC5A55A007CBDE6 /* PolarWorkout.swift */; };
+		405E6ED41EC5BDCD007CBDE6 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405E6ED31EC5BDCD007CBDE6 /* Cache.swift */; };
+		405E6ED81EC5E2CC007CBDE6 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 405E6ED71EC5E2CC007CBDE6 /* README.md */; };
+		405E6EDA1EC5E6C2007CBDE6 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405E6ED91EC5E6C2007CBDE6 /* Utilities.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		405E6EBF1EC4B5A3007CBDE6 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		405E6EC11EC4B5A3007CBDE6 /* ppt2rk */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ppt2rk; sourceTree = BUILT_PRODUCTS_DIR; };
+		405E6EC41EC4B5A3007CBDE6 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		405E6ECB1EC4B835007CBDE6 /* Polar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Polar.swift; sourceTree = "<group>"; };
+		405E6ECD1EC4B842007CBDE6 /* Network.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
+		405E6ECF1EC4B870007CBDE6 /* PolarWorkoutsParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PolarWorkoutsParser.swift; sourceTree = "<group>"; };
+		405E6ED11EC5A55A007CBDE6 /* PolarWorkout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PolarWorkout.swift; sourceTree = "<group>"; };
+		405E6ED31EC5BDCD007CBDE6 /* Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
+		405E6ED71EC5E2CC007CBDE6 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		405E6ED91EC5E6C2007CBDE6 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		405E6EBE1EC4B5A3007CBDE6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		405E6EB81EC4B5A3007CBDE6 = {
+			isa = PBXGroup;
+			children = (
+				405E6ED71EC5E2CC007CBDE6 /* README.md */,
+				405E6EC31EC4B5A3007CBDE6 /* ppt2rk */,
+				405E6EC21EC4B5A3007CBDE6 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		405E6EC21EC4B5A3007CBDE6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				405E6EC11EC4B5A3007CBDE6 /* ppt2rk */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		405E6EC31EC4B5A3007CBDE6 /* ppt2rk */ = {
+			isa = PBXGroup;
+			children = (
+				405E6ED61EC5C20D007CBDE6 /* Utilities */,
+				405E6ED51EC5C207007CBDE6 /* Polar */,
+				405E6EC41EC4B5A3007CBDE6 /* main.swift */,
+			);
+			path = ppt2rk;
+			sourceTree = "<group>";
+		};
+		405E6ED51EC5C207007CBDE6 /* Polar */ = {
+			isa = PBXGroup;
+			children = (
+				405E6ECB1EC4B835007CBDE6 /* Polar.swift */,
+				405E6ECF1EC4B870007CBDE6 /* PolarWorkoutsParser.swift */,
+				405E6ED11EC5A55A007CBDE6 /* PolarWorkout.swift */,
+			);
+			name = Polar;
+			sourceTree = "<group>";
+		};
+		405E6ED61EC5C20D007CBDE6 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				405E6ECD1EC4B842007CBDE6 /* Network.swift */,
+				405E6ED31EC5BDCD007CBDE6 /* Cache.swift */,
+				405E6ED91EC5E6C2007CBDE6 /* Utilities.swift */,
+			);
+			name = Utilities;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		405E6EC01EC4B5A3007CBDE6 /* ppt2rk */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 405E6EC81EC4B5A3007CBDE6 /* Build configuration list for PBXNativeTarget "ppt2rk" */;
+			buildPhases = (
+				405E6EBD1EC4B5A3007CBDE6 /* Sources */,
+				405E6EBE1EC4B5A3007CBDE6 /* Frameworks */,
+				405E6EBF1EC4B5A3007CBDE6 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ppt2rk;
+			productName = ppt2rk;
+			productReference = 405E6EC11EC4B5A3007CBDE6 /* ppt2rk */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		405E6EB91EC4B5A3007CBDE6 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0830;
+				LastUpgradeCheck = 0830;
+				ORGANIZATIONNAME = "App Sandwich Limited";
+				TargetAttributes = {
+					405E6EC01EC4B5A3007CBDE6 = {
+						CreatedOnToolsVersion = 8.3.1;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 405E6EBC1EC4B5A3007CBDE6 /* Build configuration list for PBXProject "ppt2rk" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 405E6EB81EC4B5A3007CBDE6;
+			productRefGroup = 405E6EC21EC4B5A3007CBDE6 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				405E6EC01EC4B5A3007CBDE6 /* ppt2rk */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		405E6EBD1EC4B5A3007CBDE6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				405E6ECC1EC4B835007CBDE6 /* Polar.swift in Sources */,
+				405E6EC51EC4B5A3007CBDE6 /* main.swift in Sources */,
+				405E6ECE1EC4B842007CBDE6 /* Network.swift in Sources */,
+				405E6ED81EC5E2CC007CBDE6 /* README.md in Sources */,
+				405E6ED01EC4B870007CBDE6 /* PolarWorkoutsParser.swift in Sources */,
+				405E6ED41EC5BDCD007CBDE6 /* Cache.swift in Sources */,
+				405E6EDA1EC5E6C2007CBDE6 /* Utilities.swift in Sources */,
+				405E6ED21EC5A55B007CBDE6 /* PolarWorkout.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		405E6EC61EC4B5A3007CBDE6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		405E6EC71EC4B5A3007CBDE6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		405E6EC91EC4B5A3007CBDE6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		405E6ECA1EC4B5A3007CBDE6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		405E6EBC1EC4B5A3007CBDE6 /* Build configuration list for PBXProject "ppt2rk" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				405E6EC61EC4B5A3007CBDE6 /* Debug */,
+				405E6EC71EC4B5A3007CBDE6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		405E6EC81EC4B5A3007CBDE6 /* Build configuration list for PBXNativeTarget "ppt2rk" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				405E6EC91EC4B5A3007CBDE6 /* Debug */,
+				405E6ECA1EC4B5A3007CBDE6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 405E6EB91EC4B5A3007CBDE6 /* Project object */;
+}

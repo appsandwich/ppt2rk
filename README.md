@@ -2,7 +2,7 @@
 
 ## About
 
-This is a command line tool that will log in to your [polarpersonaltrainer.com] account and let you export all, or some, of your workouts in GPX format.
+This is a command line tool that will log in to your [polarpersonaltrainer.com](https://polarpersonaltrainer.com) account and let you export all, or some, of your workouts in GPX format.
 
 The end goal with this project is to eventually allow exporting directly to RunKeeper. So far, only the Polar to GPX export functionality has been implemented.
 

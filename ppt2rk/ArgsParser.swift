@@ -115,7 +115,7 @@ class ArgsParser {
                 
                 switch value {
                 case .all:
-                    return nil
+                    return [-1]
                 case .first:
                     return [1]
                 case .last:

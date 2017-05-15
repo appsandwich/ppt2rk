@@ -8,13 +8,6 @@
 
 import Foundation
 
-enum ArgumentType: String {
-    case none = ""
-    case email = "email"
-    case emailShort = "e"
-    case password = "password"
-    case passwordShort = "p"
-}
 
 enum ExitCode: Int32 {
     case unknown = 1
@@ -36,18 +29,7 @@ func printHelp() {
     print("Usage: ppt2rk --email youremail@address.com --password yourpolarpassword")
 }
 
-func argumentTypeForString(_ string: String) -> ArgumentType {
-    
-    let s = string.replacingOccurrences(of: "-", with: "")
-    
-    guard let arg = ArgumentType(rawValue: s) else {
-        return .none
-    }
-    
-    return arg
-}
-
-func runApp(email: String, password: String) {
+func runApp(email: String, password: String, args: ArgsParser) {
     
     Polar.loginWithEmail(email, password: password, handler: { (loggedIn) in
         
@@ -60,12 +42,74 @@ func runApp(email: String, password: String) {
         Polar.loadWorkoutsWithHandler({ (workouts) in
             
             if let ws = workouts, ws.count > 0 {
-                promptWithWorkouts(ws)
+                
+                if let dlArgValue = args.argumentForType(.download)?.value, let indexes = ArgsParser.DownloadArgumentValue.indexesForRawString(dlArgValue, numberOfItems: (workouts?.count)!) {
+                    downloadWorkoutsAtIndexes(indexes, workouts: workouts!, showPromptWhenFinished: false)
+                    
+                }
+                else {
+                    promptWithWorkouts(ws)
+                }
             }
         })
     })
     
     semaphore.wait()
+}
+
+func downloadWorkoutsAtIndexes(_ indexes: [Int], workouts: [PolarWorkout], showPromptWhenFinished: Bool) {
+    
+    var workoutsToDownload: [PolarWorkout] = []
+    
+    if indexes.index(of: -1) == nil {
+        
+        for (index, workout) in workouts.enumerated() {
+            
+            if indexes.index(of: index) != nil {
+                workoutsToDownload.append(workout)
+            }
+        }
+    }
+    else {
+        workoutsToDownload.append(contentsOf: workouts)
+    }
+    
+    guard workoutsToDownload.count > 0 else {
+        exitApp()
+        return
+    }
+    
+    
+    let group = DispatchGroup()
+    
+    workoutsToDownload.forEach { (workout) in
+        
+        group.enter()
+        
+        Polar.exportGPXForWorkoutID(workout.id, handler: { (gpxData) in
+            
+            guard let data = gpxData else {
+                group.leave()
+                return
+            }
+            
+            if let url = Cache.cacheGPXData(data, filename: workout.id) {
+                print("GPX saved to \(url).")
+            }
+            
+            group.leave()
+        })
+        
+    }
+    
+    group.wait()
+    
+    if showPromptWhenFinished {
+        promptWithWorkouts(workouts)
+    }
+    else {
+        exitApp()
+    }
 }
 
 func promptWithWorkouts(_ workouts: [PolarWorkout]) {
@@ -113,103 +157,27 @@ func promptWithWorkouts(_ workouts: [PolarWorkout]) {
         return
     }
     
-    
-    var workoutsToDownload: [PolarWorkout] = []
-    
-    if indexes.index(of: 0) == nil {
-        
-        for (index, workout) in workouts.enumerated() {
-            
-            if indexes.index(of: index) != nil {
-                workoutsToDownload.append(workout)
-            }
-        }
-    }
-    else {
-        workoutsToDownload.append(contentsOf: workouts)
+    // Shift indexes
+    let shiftedIndexes = indexes.map { (index) -> Int in
+        return index - 1
     }
     
-    guard workoutsToDownload.count > 0 else {
-        exitApp()
-        return
-    }
-    
-    
-    let group = DispatchGroup()
-    
-    workoutsToDownload.forEach { (workout) in
-        
-        group.enter()
-     
-        Polar.exportGPXForWorkoutID(workout.id, handler: { (gpxData) in
-            
-            guard let data = gpxData else {
-                group.leave()
-                return
-            }
-            
-            if let url = Cache.cacheGPXData(data, filename: workout.id) {
-                print("GPX saved to \(url).")
-            }
-            
-            group.leave()
-        })
-        
-    }
-    
-    group.wait()
-    
-    promptWithWorkouts(workouts)
+    downloadWorkoutsAtIndexes(shiftedIndexes, workouts: workouts, showPromptWhenFinished: true)
 }
 
 // MARK: - main()
 
 let arguments = CommandLine.arguments
 
-if arguments.count > 4 {
-    
-    let argumentType1 = argumentTypeForString(arguments[1])
-    let value1 = arguments[2]
-    
-    let argumentType2 = argumentTypeForString(arguments[3])
-    let value2 = arguments[4]
+let argsParser = ArgsParser(arguments)
 
+if argsParser.hasArgumentOfType(.email) && argsParser.hasArgumentOfType(.password) {
+ 
+    var email = argsParser.argumentForType(.email)
+    var password = argsParser.argumentForType(.password)
     
-    var email: String? = nil
-    var password: String? = nil
-    
-    switch argumentType1 {
-    case .email:
-        fallthrough
-    case .emailShort:
-        email = value1
-        break
-    case .password:
-        fallthrough
-    case .passwordShort:
-        password = value1
-        break
-    default:
-        break
-    }
-    
-    switch argumentType2 {
-    case .email:
-        fallthrough
-    case .emailShort:
-        email = value2
-        break
-    case .password:
-        fallthrough
-    case .passwordShort:
-        password = value2
-        break
-    default:
-        break
-    }
-    
-    if let e = email, let p = password {
-        runApp(email: e, password: p)
+    if let e = email?.value, let p = password?.value {
+        runApp(email: e, password: p, args: argsParser)
     }
     else {
         printHelp()

@@ -13,8 +13,8 @@
 		405E6ED01EC4B870007CBDE6 /* PolarWorkoutsParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405E6ECF1EC4B870007CBDE6 /* PolarWorkoutsParser.swift */; };
 		405E6ED21EC5A55B007CBDE6 /* PolarWorkout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405E6ED11EC5A55A007CBDE6 /* PolarWorkout.swift */; };
 		405E6ED41EC5BDCD007CBDE6 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405E6ED31EC5BDCD007CBDE6 /* Cache.swift */; };
-		405E6ED81EC5E2CC007CBDE6 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 405E6ED71EC5E2CC007CBDE6 /* README.md */; };
 		405E6EDA1EC5E6C2007CBDE6 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405E6ED91EC5E6C2007CBDE6 /* Utilities.swift */; };
+		405E6EDC1EC9ACF2007CBDE6 /* ArgsParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405E6EDB1EC9ACF2007CBDE6 /* ArgsParser.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -37,8 +37,8 @@
 		405E6ECF1EC4B870007CBDE6 /* PolarWorkoutsParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PolarWorkoutsParser.swift; sourceTree = "<group>"; };
 		405E6ED11EC5A55A007CBDE6 /* PolarWorkout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PolarWorkout.swift; sourceTree = "<group>"; };
 		405E6ED31EC5BDCD007CBDE6 /* Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
-		405E6ED71EC5E2CC007CBDE6 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		405E6ED91EC5E6C2007CBDE6 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		405E6EDB1EC9ACF2007CBDE6 /* ArgsParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArgsParser.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,7 +55,6 @@
 		405E6EB81EC4B5A3007CBDE6 = {
 			isa = PBXGroup;
 			children = (
-				405E6ED71EC5E2CC007CBDE6 /* README.md */,
 				405E6EC31EC4B5A3007CBDE6 /* ppt2rk */,
 				405E6EC21EC4B5A3007CBDE6 /* Products */,
 			);
@@ -95,6 +94,7 @@
 				405E6ECD1EC4B842007CBDE6 /* Network.swift */,
 				405E6ED31EC5BDCD007CBDE6 /* Cache.swift */,
 				405E6ED91EC5E6C2007CBDE6 /* Utilities.swift */,
+				405E6EDB1EC9ACF2007CBDE6 /* ArgsParser.swift */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -160,7 +160,7 @@
 				405E6ECC1EC4B835007CBDE6 /* Polar.swift in Sources */,
 				405E6EC51EC4B5A3007CBDE6 /* main.swift in Sources */,
 				405E6ECE1EC4B842007CBDE6 /* Network.swift in Sources */,
-				405E6ED81EC5E2CC007CBDE6 /* README.md in Sources */,
+				405E6EDC1EC9ACF2007CBDE6 /* ArgsParser.swift in Sources */,
 				405E6ED01EC4B870007CBDE6 /* PolarWorkoutsParser.swift in Sources */,
 				405E6ED41EC5BDCD007CBDE6 /* Cache.swift in Sources */,
 				405E6EDA1EC5E6C2007CBDE6 /* Utilities.swift in Sources */,

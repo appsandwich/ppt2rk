@@ -222,8 +222,14 @@ if argsParser.hasArgumentOfType(.reset) {
 
 var email = argsParser.argumentForType(.email)
 var password = argsParser.argumentForType(.password)
+var passwordValue = password?.value
 
-if let e = email?.value, let p = password?.value {
+if argsParser.hasArgumentOfType(.email) && passwordValue == nil {
+    print("Please enter a password to continue: ")
+    passwordValue = readLine()
+}
+
+if let e = email?.value, let p = passwordValue {
     
     if argsParser.hasArgumentOfType(.keychain) {
         // Save to keychain

@@ -43,9 +43,44 @@ func runApp(email: String, password: String, args: ArgsParser) {
             
             if let ws = workouts, ws.count > 0 {
                 
-                if let dlArgValue = args.argumentForType(.download)?.value, let indexes = ArgsParser.DownloadArgumentValue.indexesForRawString(dlArgValue, numberOfItems: (workouts?.count)!) {
+                guard let arg = args.argumentForType(.download), let argValue = arg.value else {
+                    promptWithWorkouts(ws)
+                    return
+                }
+                
+                
+                if let indexes = arg.downloadValueIndexesForItemCount(ws.count) {
                     downloadWorkoutsAtIndexes(indexes, workouts: workouts!, showPromptWhenFinished: false)
+                }
+                else if let v = DownloadArgumentValue(rawValue: argValue), v == .sync {
                     
+                    // Sync mode
+                    
+                    print("Performing sync...")
+                    
+                    if let ids = PolarWorkout.downloadedWorkoutIDs() {
+                        
+                        let workoutsToDownload = ws.filter({ (workout) -> Bool in
+                            return ids.index(of: workout.id) == nil
+                        })
+                        
+                        switch workoutsToDownload.count {
+                        case 0:
+                            print("No new workouts.")
+                            break
+                        case 1:
+                            print("1 new workout.")
+                            break
+                        default:
+                            print("\(workoutsToDownload.count) new workouts.")
+                            break
+                        }
+                        
+                        downloadWorkouts(workoutsToDownload, showPromptWhenFinished: false)
+                    }
+                    else {
+                        downloadWorkouts(ws, showPromptWhenFinished: false)
+                    }
                 }
                 else {
                     promptWithWorkouts(ws)
@@ -74,7 +109,12 @@ func downloadWorkoutsAtIndexes(_ indexes: [Int], workouts: [PolarWorkout], showP
         workoutsToDownload.append(contentsOf: workouts)
     }
     
-    guard workoutsToDownload.count > 0 else {
+    downloadWorkouts(workoutsToDownload, showPromptWhenFinished: showPromptWhenFinished)
+}
+
+func downloadWorkouts( _ workouts: [PolarWorkout], showPromptWhenFinished: Bool) {
+    
+    guard workouts.count > 0 else {
         exitApp()
         return
     }
@@ -82,7 +122,7 @@ func downloadWorkoutsAtIndexes(_ indexes: [Int], workouts: [PolarWorkout], showP
     
     let group = DispatchGroup()
     
-    workoutsToDownload.forEach { (workout) in
+    workouts.forEach { (workout) in
         
         group.enter()
         
@@ -95,6 +135,7 @@ func downloadWorkoutsAtIndexes(_ indexes: [Int], workouts: [PolarWorkout], showP
             
             if let url = Cache.cacheGPXData(data, filename: workout.id) {
                 print("GPX saved to \(url).")
+                workout.markAsDownloaded()
             }
             
             group.leave()
@@ -170,6 +211,11 @@ func promptWithWorkouts(_ workouts: [PolarWorkout]) {
 let arguments = CommandLine.arguments
 
 let argsParser = ArgsParser(arguments)
+
+if argsParser.hasArgumentOfType(.reset) {
+    print("Removing list of downloaded workouts.")
+    PolarWorkout.resetDownloadedWorkoutIDs()
+}
 
 if argsParser.hasArgumentOfType(.email) && argsParser.hasArgumentOfType(.password) {
  

@@ -20,6 +20,15 @@ class Arg {
         self.type = type
         self.value = value
     }
+    
+    public func downloadValueIndexesForItemCount(_ itemCount: Int) -> [Int]? {
+        
+        guard self.type == .download, let v = self.value else {
+            return nil
+        }
+        
+        return DownloadArgumentValue.indexesForRawString(v, numberOfItems: itemCount)
+    }
 }
 
 extension Arg: Equatable {}
@@ -36,21 +45,20 @@ enum ArgumentType: String {
     case email = "email"
     case password = "password"
     case download = "download"
+    case reset = "reset"
     
     static func all() -> [ArgumentType] {
-        return [.email, .password, .download]
+        return [.email, .password, .download, .reset]
     }
     
     func expectsValue() -> Bool {
         
-        return true
-        
-//        switch self {
-//        case .download:
-//            return false
-//        default:
-//            return true
-//        }
+        switch self {
+        case .reset:
+            return false
+        default:
+            return true
+        }
     }
     
     func shortVersion() -> String {
@@ -64,6 +72,7 @@ enum ArgumentType: String {
     func matchesString(_ string: String) -> Bool {
         return self.shortVersion() == string || self.longVersion() == string
     }
+    
     
     static func forString(_ string: String) -> ArgumentType? {
         
@@ -100,55 +109,57 @@ enum ArgumentType: String {
     }
 }
 
+enum DownloadArgumentValue: String {
+    
+    case all = "all"
+    case first = "first"
+    case last = "last"
+    case sync = "sync"
+    
+    static func indexesForRawString(_ string: String, numberOfItems: Int) -> [Int]? {
+        
+        if let value = DownloadArgumentValue(rawValue: string) {
+            
+            switch value {
+            case .all:
+                return [-1]
+            case .first:
+                return [1]
+            case .last:
+                return [numberOfItems - 1]
+            case .sync:
+                return nil
+            }
+        }
+        else {
+            
+            if string.contains(DownloadArgumentValue.first.rawValue) {
+                
+                if let lastChar = string.characters.last {
+                    
+                    if let count = Int("\(lastChar)") , count > 0 {
+                        return Array(0...(count - 1))
+                    }
+                }
+            }
+            else if string.contains(DownloadArgumentValue.last.rawValue) {
+                
+                if let lastChar = string.characters.last {
+                    
+                    if let count = Int("\(lastChar)") , count > 0 {
+                        return Array(1...count).map({ (index) -> Int in
+                            return numberOfItems - index
+                        })
+                    }
+                }
+            }
+        }
+        
+        return [numberOfItems - 1]
+    }
+}
 
 class ArgsParser {
-    
-    enum DownloadArgumentValue: String {
-        
-        case all = "all"
-        case first = "first"
-        case last = "last"
-        
-        static func indexesForRawString(_ string: String, numberOfItems: Int) -> [Int]? {
-            
-            if let value = DownloadArgumentValue(rawValue: string) {
-                
-                switch value {
-                case .all:
-                    return [-1]
-                case .first:
-                    return [1]
-                case .last:
-                    return [numberOfItems - 1]
-                }
-            }
-            else {
-                
-                if string.contains(DownloadArgumentValue.first.rawValue) {
-                    
-                    if let lastChar = string.characters.last {
-                        
-                        if let count = Int("\(lastChar)") , count > 0 {
-                            return Array(0...(count - 1))
-                        }
-                    }
-                }
-                else if string.contains(DownloadArgumentValue.last.rawValue) {
-                    
-                    if let lastChar = string.characters.last {
-                        
-                        if let count = Int("\(lastChar)") , count > 0 {
-                            return Array(1...count).map({ (index) -> Int in
-                                return numberOfItems - index
-                            })
-                        }
-                    }
-                }
-            }
-            
-            return [numberOfItems - 1]
-        }
-    }
     
     var arguments: [Arg]
     

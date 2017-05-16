@@ -13,6 +13,8 @@ enum ExitCode: Int32 {
     case unknown = 1
     case badArgument = 2
     case loginFailed = 3
+    case noKeychainItems = 4
+    case keychainSaveFailed = 5
 }
 
 let semaphore = DispatchSemaphore(value: 0)
@@ -217,18 +219,63 @@ if argsParser.hasArgumentOfType(.reset) {
     PolarWorkout.resetDownloadedWorkoutIDs()
 }
 
-if argsParser.hasArgumentOfType(.email) && argsParser.hasArgumentOfType(.password) {
- 
-    var email = argsParser.argumentForType(.email)
-    var password = argsParser.argumentForType(.password)
+
+var email = argsParser.argumentForType(.email)
+var password = argsParser.argumentForType(.password)
+
+if let e = email?.value, let p = password?.value {
     
-    if let e = email?.value, let p = password?.value {
-        runApp(email: e, password: p, args: argsParser)
+    if argsParser.hasArgumentOfType(.keychain) {
+        // Save to keychain
+        
+        let keychainItem = KeychainPasswordItem(service: "com.appsandwich.ppt2rk", account: e)
+        
+        do {
+            try keychainItem.savePassword(p)
+        }
+        catch {
+            fatalError("Error saving password - \(error)")
+        }
     }
-    else {
+    
+    runApp(email: e, password: p, args: argsParser)
+}
+else if argsParser.hasArgumentOfType(.keychain) {
+    
+    // Load from keychain
+    
+    var passwordItems: [KeychainPasswordItem]? = nil
+    
+    do {
+        passwordItems = try KeychainPasswordItem.passwordItems(forService: "com.appsandwich.ppt2rk")
+    }
+    catch {
+        fatalError("Error fetching password items - \(error)")
+    }
+    
+    guard let pws = passwordItems, pws.count > 0, let e = pws.first?.account else {
         printHelp()
-        exitWithErrorCode(.badArgument)
+        exitWithErrorCode(.noKeychainItems)
+        exit(0) // Suppress compiler warning.
     }
+    
+    var p: String? = nil
+    
+    do {
+        try p = pws.first?.readPassword()
+    }
+    catch {
+        printHelp()
+        exitWithErrorCode(.noKeychainItems)
+    }
+    
+    guard let pass = p else {
+        printHelp()
+        exitWithErrorCode(.noKeychainItems)
+        exit(0) // Suppress compiler warning.
+    }
+    
+    runApp(email: e, password: pass, args: argsParser)
 }
 else {
     printHelp()

@@ -46,15 +46,18 @@ enum ArgumentType: String {
     case password = "password"
     case download = "download"
     case reset = "reset"
+    case keychain = "keychain"
     
     static func all() -> [ArgumentType] {
-        return [.email, .password, .download, .reset]
+        return [.email, .password, .download, .reset, .keychain]
     }
     
     func expectsValue() -> Bool {
         
         switch self {
         case .reset:
+            fallthrough
+        case .keychain:
             return false
         default:
             return true

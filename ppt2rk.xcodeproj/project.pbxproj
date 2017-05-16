@@ -15,6 +15,7 @@
 		405E6ED41EC5BDCD007CBDE6 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405E6ED31EC5BDCD007CBDE6 /* Cache.swift */; };
 		405E6EDA1EC5E6C2007CBDE6 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405E6ED91EC5E6C2007CBDE6 /* Utilities.swift */; };
 		405E6EDC1EC9ACF2007CBDE6 /* ArgsParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405E6EDB1EC9ACF2007CBDE6 /* ArgsParser.swift */; };
+		405E6EE51ECAFA86007CBDE6 /* KeychainPasswordItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405E6EE41ECAFA86007CBDE6 /* KeychainPasswordItem.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -39,6 +40,7 @@
 		405E6ED31EC5BDCD007CBDE6 /* Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
 		405E6ED91EC5E6C2007CBDE6 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		405E6EDB1EC9ACF2007CBDE6 /* ArgsParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArgsParser.swift; sourceTree = "<group>"; };
+		405E6EE41ECAFA86007CBDE6 /* KeychainPasswordItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainPasswordItem.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +93,7 @@
 		405E6ED61EC5C20D007CBDE6 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				405E6EE41ECAFA86007CBDE6 /* KeychainPasswordItem.swift */,
 				405E6ECD1EC4B842007CBDE6 /* Network.swift */,
 				405E6ED31EC5BDCD007CBDE6 /* Cache.swift */,
 				405E6ED91EC5E6C2007CBDE6 /* Utilities.swift */,
@@ -162,6 +165,7 @@
 				405E6ECE1EC4B842007CBDE6 /* Network.swift in Sources */,
 				405E6EDC1EC9ACF2007CBDE6 /* ArgsParser.swift in Sources */,
 				405E6ED01EC4B870007CBDE6 /* PolarWorkoutsParser.swift in Sources */,
+				405E6EE51ECAFA86007CBDE6 /* KeychainPasswordItem.swift in Sources */,
 				405E6ED41EC5BDCD007CBDE6 /* Cache.swift in Sources */,
 				405E6EDA1EC5E6C2007CBDE6 /* Utilities.swift in Sources */,
 				405E6ED21EC5A55B007CBDE6 /* PolarWorkout.swift in Sources */,

@@ -10,17 +10,20 @@ import Foundation
 
 class Network {
     
+    enum Endpoint: String {
+        case polar = "https://www.polarpersonaltrainer.com"
+        case runkeeper = "https://runkeeper.com"
+    }
+    
     enum ContentType: String {
         case form = "application/x-www-form-urlencoded"
         case xml = "application/xml"
         case json = "application/json;charset=UTF-8"
     }
     
-    static var api = "https://www.polarpersonaltrainer.com"
-    
-    class func sendRequest(_ path: String, method: String, bodyParams: Dictionary<String, Any>?, contentType: ContentType, handler: @escaping (Data?, Error?) -> Void) -> URLSessionDataTask? {
+    class func sendRequest(_ endpoint: Endpoint, path: String, method: String, bodyParams: Dictionary<String, Any>?, contentType: ContentType, handler: @escaping (Data?, Error?) -> Void) -> URLSessionDataTask? {
         
-        guard let url = URL(string: api + path) else {
+        guard let url = URL(string: endpoint.rawValue + path) else {
             handler(nil, nil)
             return nil
         }
@@ -108,15 +111,49 @@ class Network {
         return task
     }
     
-    class func sendGETRequest(_ path: String, contentType: ContentType, handler: @escaping (Data?, Error?) -> Void) -> URLSessionDataTask? {
-        return self.sendRequest(path, method: "GET", bodyParams: nil, contentType: contentType, handler: handler)
+    class func sendGETRequest(_ endpoint: Endpoint, path: String, contentType: ContentType, handler: @escaping (Data?, Error?) -> Void) -> URLSessionDataTask? {
+        return self.sendRequest(endpoint, path: path, method: "GET", bodyParams: nil, contentType: contentType, handler: handler)
     }
     
-    class func sendPUTRequest(_ path: String, bodyParams: Dictionary<String, Any>?, contentType: ContentType, handler: @escaping (Data?, Error?) -> Void) -> URLSessionDataTask? {
-        return self.sendRequest(path, method: "PUT", bodyParams: bodyParams, contentType: contentType, handler: handler)
+    class func sendPUTRequest(_ endpoint: Endpoint, path: String, bodyParams: Dictionary<String, Any>?, contentType: ContentType, handler: @escaping (Data?, Error?) -> Void) -> URLSessionDataTask? {
+        return self.sendRequest(endpoint, path: path, method: "PUT", bodyParams: bodyParams, contentType: contentType, handler: handler)
     }
     
-    class func sendPOSTRequest(_ path: String, bodyParams: Dictionary<String, Any>?, contentType: ContentType, handler: @escaping (Data?, Error?) -> Void) -> URLSessionDataTask? {
-        return self.sendRequest(path, method: "POST", bodyParams: bodyParams, contentType: contentType, handler: handler)
+    class func sendPOSTRequest(_ endpoint: Endpoint, path: String, bodyParams: Dictionary<String, Any>?, contentType: ContentType, handler: @escaping (Data?, Error?) -> Void) -> URLSessionDataTask? {
+        return self.sendRequest(endpoint, path: path, method: "POST", bodyParams: bodyParams, contentType: contentType, handler: handler)
+    }
+    
+    class func sendMultipartRequest(_ multipartRequest: NetworkMultipartRequest, to endpoint: Endpoint, path: String, handler: @escaping (Data?, Error?) -> Void) -> URLSessionDataTask? {
+        
+        guard let url = URL(string: endpoint.rawValue + path) else {
+            handler(nil, nil)
+            return nil
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        
+        request.setValue("multipart/form-data; boundary=\(multipartRequest.contentTypeBoundaryString())", forHTTPHeaderField: "Content-Type")
+        
+        let data = multipartRequest.data()
+        
+        request.setValue("\(data.count)", forHTTPHeaderField: "Content-Length")
+        
+        request.httpBody = data;
+
+        request.setValue("*/*", forHTTPHeaderField: "Accept")
+        request.setValue(url.host!, forHTTPHeaderField: "Host")
+        request.setValue("curl/7.51.0", forHTTPHeaderField: "User-Agent")
+        
+        let task = URLSession.shared.dataTask(with: request, completionHandler:  { (data, response, error) in
+            
+            DispatchQueue.global(qos: .background).async {
+                handler(data, error)
+            }
+        })
+        
+        task.resume()
+        
+        return task
     }
 }

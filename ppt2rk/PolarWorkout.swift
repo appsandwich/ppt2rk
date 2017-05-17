@@ -14,10 +14,18 @@ class PolarWorkout {
     
     public var id: String
     public var timestamp: String
+    public var distance: String
+    public var duration: String
+    public var runkeeperMonth, runkeeperDay: String?
     
-    init(id: String, timestamp: String) {
+    init(id: String, timestamp: String, distance: String, duration: String, runkeeperMonth: String?, runkeeperDay: String?) {
+        
         self.id = id
         self.timestamp = timestamp
+        self.distance = distance
+        self.duration = duration
+        self.runkeeperMonth = runkeeperMonth
+        self.runkeeperDay = runkeeperDay
     }
     
     public func markAsDownloaded() {
@@ -57,6 +65,12 @@ class PolarWorkout {
     public class func resetDownloadedWorkoutIDs() {
         UserDefaults.standard.removeObject(forKey: self.idsKey)
         UserDefaults.standard.synchronize()
+    }
+}
+
+extension PolarWorkout: CustomStringConvertible {
+    var description: String {
+        return "****************\nPolarWorkout\nid: \(self.id)\ntimestamp: \(self.timestamp)\ndistance: \(self.distance)\nduration: \(self.duration)\n****************"
     }
 }
 

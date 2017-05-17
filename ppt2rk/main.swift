@@ -19,6 +19,8 @@ enum ExitCode: Int32 {
 
 let semaphore = DispatchSemaphore(value: 0)
 
+let runkeeperUploadQueue = RunkeeperActivityUploadQueue()
+
 func exitApp() {
     semaphore.signal()
 }
@@ -31,9 +33,32 @@ func printHelp() {
     print("Usage: ppt2rk --email youremail@address.com --password yourpolarpassword")
 }
 
-func runApp(email: String, password: String, args: ArgsParser) {
+func runApp(polarEmail: String, polarPassword: String, runkeeperEmail: String?, runkeeperPassword: String?, args: ArgsParser) {
     
-    Polar.loginWithEmail(email, password: password, handler: { (loggedIn) in
+    var runkeeperUsername: String? = nil
+    
+    if let arg = args.argumentForType(.download), let argValue = arg.value, let v = DownloadArgumentValue(rawValue: argValue), v == .runkeeper {
+        
+        guard let rke = runkeeperEmail, let rkp = runkeeperPassword else {
+            exitWithErrorCode(.badArgument)
+            return
+        }
+        
+        Runkeeper.loginWithEmail(rke, password: rkp, handler: { (username) in
+            
+            guard let u = username else {
+                print("Runkeeper login failed.")
+                return
+            }
+            
+            print("Logged in to Runkeeper as \(u). Waiting for Polar workouts list...")
+            
+            runkeeperUsername = u
+        })
+    }
+    
+    
+    Polar.loginWithEmail(polarEmail, password: polarPassword, handler: { (loggedIn) in
         
         guard loggedIn == true else {
             print("Error: Login failed.")
@@ -53,6 +78,102 @@ func runApp(email: String, password: String, args: ArgsParser) {
                 
                 if let indexes = arg.downloadValueIndexesForItemCount(ws.count) {
                     downloadWorkoutsAtIndexes(indexes, workouts: workouts!, showPromptWhenFinished: false)
+                }
+                else if let v = DownloadArgumentValue(rawValue: argValue), v == .runkeeper {
+                    
+                    // Runkeeper sync
+                    
+                    guard let rkUser = runkeeperUsername else {
+                        print("Error: Runkeeper login failed or timed out.")
+                        exitWithErrorCode(.loginFailed)
+                        return
+                    }
+                    
+                    print("Performing Runkeeper sync...")
+                    
+                    let months = ws.flatMap({ (workout) -> String? in
+                        return workout.runkeeperMonth
+                    })
+                    
+                    let uniqueMonths = Set(months)
+                    
+                    //print("\(uniqueMonths)")
+                    
+                    uniqueMonths.forEach({ (month) in
+                        
+                        Runkeeper.loadActivitiesForUsername(rkUser, month: month, handler: { (activities) in
+                            
+                            let workoutsForMonth = ws.filter({ (workout) -> Bool in
+                                return workout.runkeeperMonth == month
+                            })
+                            
+                            guard workoutsForMonth.count > 0 else {
+                                print("Error: Something bad happened.")
+                                exitWithErrorCode(.unknown)
+                                return
+                            }
+
+                            
+                            var activitiesForMonth: [RunkeeperActivity]
+                            
+                            if let afm = activities {
+                                activitiesForMonth = afm
+                            }
+                            else {
+                                print("No Runkeeper activities found for \(month).")
+                                activitiesForMonth = []
+                            }
+                            
+                            //print("\(a.count) Runkeeper activities found for \(month).")
+                            
+                            let polarWorkoutsToSync = workoutsForMonth.filter({ (workout) -> Bool in
+                                return !activitiesForMonth.contains(where: { (activity) -> Bool in
+                                    
+                                    guard let day = workout.runkeeperDay else {
+                                        return false
+                                    }
+                                    
+                                    return activity.day == day
+                                })
+                            })
+                            
+                            if polarWorkoutsToSync.count > 0 {
+                                
+                                print("Runkeeper: \(month) is out of sync.")
+                                
+                                polarWorkoutsToSync.forEach({ (workout) in
+                                    
+                                    // REMOVE THIS
+                                    //workout.id = "246351701"
+                                    
+                                    let dataHandler: (Data?) -> Void = { (gpxData) in
+                                        
+                                        guard let polarGPXData = gpxData else {
+                                            return
+                                        }
+                                        
+                                        print("\(workout) has data. Upload to Runkeeper!")
+                                        
+                                        runkeeperUploadQueue.enqueueGPXData(polarGPXData, workout: workout, handler: { (activityWithConvertedData) in
+                                            
+                                            guard let createdActivity = activityWithConvertedData else {
+                                                return
+                                            }
+                                            
+                                            print("Created Runkeeper activity with ID: \(createdActivity.id)")
+                                        })
+                                    }
+                                    
+                                    if let data = Cache.cachedGPXDataForFile(workout.id) {
+                                       dataHandler(data)
+                                    }
+                                    else {
+                                        Polar.exportGPXForWorkoutID(workout.id, handler: dataHandler)
+                                    }
+                                })
+                            }
+                        })
+                    })
                 }
                 else if let v = DownloadArgumentValue(rawValue: argValue), v == .sync {
                     
@@ -114,6 +235,24 @@ func downloadWorkoutsAtIndexes(_ indexes: [Int], workouts: [PolarWorkout], showP
     downloadWorkouts(workoutsToDownload, showPromptWhenFinished: showPromptWhenFinished)
 }
 
+func downloadWorkout(_ workout: PolarWorkout, handler: @escaping (Data?) -> Void) {
+    
+    Polar.exportGPXForWorkoutID(workout.id, handler: { (gpxData) in
+        
+        guard let data = gpxData else {
+            handler(nil)
+            return
+        }
+        
+        if let url = Cache.cacheGPXData(data, filename: workout.id) {
+            print("GPX saved to \(url).")
+            workout.markAsDownloaded()
+        }
+        
+        handler(data)
+    })
+}
+
 func downloadWorkouts( _ workouts: [PolarWorkout], showPromptWhenFinished: Bool) {
     
     guard workouts.count > 0 else {
@@ -128,18 +267,7 @@ func downloadWorkouts( _ workouts: [PolarWorkout], showPromptWhenFinished: Bool)
         
         group.enter()
         
-        Polar.exportGPXForWorkoutID(workout.id, handler: { (gpxData) in
-            
-            guard let data = gpxData else {
-                group.leave()
-                return
-            }
-            
-            if let url = Cache.cacheGPXData(data, filename: workout.id) {
-                print("GPX saved to \(url).")
-                workout.markAsDownloaded()
-            }
-            
+        downloadWorkout(workout, handler: { (gpxData) in
             group.leave()
         })
         
@@ -208,6 +336,7 @@ func promptWithWorkouts(_ workouts: [PolarWorkout]) {
     downloadWorkoutsAtIndexes(shiftedIndexes, workouts: workouts, showPromptWhenFinished: true)
 }
 
+
 // MARK: - main()
 
 let arguments = CommandLine.arguments
@@ -220,68 +349,43 @@ if argsParser.hasArgumentOfType(.reset) {
 }
 
 
-var email = argsParser.argumentForType(.email)
-var password = argsParser.argumentForType(.password)
-var passwordValue = password?.value
+let credentials = Credentials(argsParser)
 
-if argsParser.hasArgumentOfType(.email) && passwordValue == nil {
-    print("Please enter a password to continue: ")
-    passwordValue = readLine()
+
+// Polar
+
+var polarEmail = credentials.polarEmail()
+var polarPassword = credentials.polarPassword()
+
+if polarEmail != nil && polarPassword == nil {
+    
+    print("Please enter your Polar password to continue: ")
+    polarPassword = readLine()
+    
+    if let e = polarEmail, let p = polarPassword, argsParser.hasArgumentOfType(.keychain) {
+        credentials.saveEmail(e, password: p, argumentType: .polarPassword)
+    }
 }
 
-if let e = email?.value, let p = passwordValue {
+
+// Runkeeper
+
+var rkEmail = credentials.runkeeperEmail()
+var rkPassword = credentials.runkeeperPassword()
+
+if rkEmail != nil && rkPassword == nil {
     
-    if argsParser.hasArgumentOfType(.keychain) {
-        // Save to keychain
-        
-        let keychainItem = KeychainPasswordItem(service: "com.appsandwich.ppt2rk", account: e)
-        
-        do {
-            try keychainItem.savePassword(p)
-        }
-        catch {
-            fatalError("Error saving password - \(error)")
-        }
+    print("Please enter your Runkeeper password to continue: ")
+    rkPassword = readLine()
+    
+    if let e = rkEmail, let p = rkPassword, argsParser.hasArgumentOfType(.keychain) {
+        credentials.saveEmail(e, password: p, argumentType: .runkeeperPassword)
     }
-    
-    runApp(email: e, password: p, args: argsParser)
 }
-else if argsParser.hasArgumentOfType(.keychain) {
-    
-    // Load from keychain
-    
-    var passwordItems: [KeychainPasswordItem]? = nil
-    
-    do {
-        passwordItems = try KeychainPasswordItem.passwordItems(forService: "com.appsandwich.ppt2rk")
-    }
-    catch {
-        fatalError("Error fetching password items - \(error)")
-    }
-    
-    guard let pws = passwordItems, pws.count > 0, let e = pws.first?.account else {
-        printHelp()
-        exitWithErrorCode(.noKeychainItems)
-        exit(0) // Suppress compiler warning.
-    }
-    
-    var p: String? = nil
-    
-    do {
-        try p = pws.first?.readPassword()
-    }
-    catch {
-        printHelp()
-        exitWithErrorCode(.noKeychainItems)
-    }
-    
-    guard let pass = p else {
-        printHelp()
-        exitWithErrorCode(.noKeychainItems)
-        exit(0) // Suppress compiler warning.
-    }
-    
-    runApp(email: e, password: pass, args: argsParser)
+
+
+if let e = polarEmail, let p = polarPassword {
+    runApp(polarEmail: e, polarPassword: p, runkeeperEmail: rkEmail, runkeeperPassword: rkPassword, args: argsParser)
 }
 else {
     printHelp()

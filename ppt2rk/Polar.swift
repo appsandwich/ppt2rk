@@ -15,15 +15,15 @@ class Polar {
         let df = DateFormatter()
         df.locale = Locale(identifier: "en_US_POSIX")
         df.timeZone = TimeZone(identifier: "UTC")
-        df.dateFormat = "YYYY-MM-dd'T'HH:mm:ss.SSS"
+        df.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS"
         return df.string(from: date)
     }
     
     class func loginWithEmail(_ email: String, password: String, handler: @escaping (Bool) -> Void) {
         
-        print("Logging in as \(email)...")
+        print("Logging in to Polar as \(email)...")
         
-        _ = Network.sendPOSTRequest("/index.ftl", bodyParams: [ "email" : email, "password" : password, ".action" : "login" ], contentType: .form, handler: { (d, e) in
+        _ = Network.sendPOSTRequest(.polar, path: "/index.ftl", bodyParams: [ "email" : email, "password" : password, ".action" : "login" ], contentType: .form, handler: { (d, e) in
             
             var loggedIn = false
             
@@ -44,11 +44,11 @@ class Polar {
         let start = self.stringForDate(startDate)
         let end = self.stringForDate(endDate)
         
-        print("Getting workouts from \(start) to \(end). This may take some time...")
+        print("Getting Polar workouts from \(start) to \(end). This may take some time...")
         
         let xmlString = "<request><object name=\"root\"><prop name=\"startDate\" type=\"Timestamp\"><![CDATA[\(start)]]></prop><prop name=\"endDate\" type=\"Timestamp\"><![CDATA[\(end)]]></prop></object></request>"
         
-        _ = Network.sendPOSTRequest("/user/calendar/index.xml?.action=items&rmzer=1494499701372", bodyParams: [ "xml" : xmlString ] , contentType: .xml, handler: { (d, e) in
+        _ = Network.sendPOSTRequest(.polar, path: "/user/calendar/index.xml?.action=items&rmzer=1494499701372", bodyParams: [ "xml" : xmlString ] , contentType: .xml, handler: { (d, e) in
             
             guard let data = d else {
                 handler(nil)
@@ -82,7 +82,7 @@ class Polar {
         
         // curl -b pptcookies.txt -d 'items.0.item=777850771&items.0.itemType=OptimizedExercise&.filename=filename&.action=gpx' https://www.polarpersonaltrainer.com/user/calendar/index.gpx
         
-        _ = Network.sendPOSTRequest("/user/calendar/index.gpx", bodyParams: [ "items.0.item" : workoutID, "items.0.itemType" : "OptimizedExercise", ".filename" : workoutID + ".gpx", ".action" : "gpx" ], contentType: .form, handler: { (d, e) in
+        _ = Network.sendPOSTRequest(.polar, path: "/user/calendar/index.gpx", bodyParams: [ "items.0.item" : workoutID, "items.0.itemType" : "OptimizedExercise", ".filename" : workoutID + ".gpx", ".action" : "gpx" ], contentType: .form, handler: { (d, e) in
             handler(d)
         })
     }

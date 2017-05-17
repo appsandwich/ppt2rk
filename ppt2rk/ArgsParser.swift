@@ -42,14 +42,16 @@ func ==(lhs: Arg, rhs: Arg) -> Bool {
 
 enum ArgumentType: String {
     
-    case email = "email"
-    case password = "password"
+    case polarEmail = "email"
+    case polarPassword = "password"
+    case runkeeperEmail = "rkemail"
+    case runkeeperPassword = "rkpassword"
     case download = "download"
     case reset = "reset"
     case keychain = "keychain"
     
     static func all() -> [ArgumentType] {
-        return [.email, .password, .download, .reset, .keychain]
+        return [.polarEmail, .polarPassword, .runkeeperEmail, .runkeeperPassword, .download, .reset, .keychain]
     }
     
     func expectsValue() -> Bool {
@@ -65,11 +67,27 @@ enum ArgumentType: String {
     }
     
     func shortVersion() -> String {
-        return "-" + String(describing: self.rawValue.characters.first!)
+        
+        switch self {
+        case .runkeeperEmail:
+            return "-rke"
+        case .runkeeperPassword:
+            return "-rkp"
+        default:
+            return "-" + String(describing: self.rawValue.characters.first!)
+        }
     }
     
     func longVersion() -> String {
-        return "--" + self.rawValue
+        
+        switch self {
+        case .runkeeperEmail:
+            return "--rkemail"
+        case .runkeeperPassword:
+            return "--rkpassword"
+        default:
+            return "--" + self.rawValue
+        }
     }
     
     func matchesString(_ string: String) -> Bool {
@@ -118,6 +136,7 @@ enum DownloadArgumentValue: String {
     case first = "first"
     case last = "last"
     case sync = "sync"
+    case runkeeper = "runkeeper"
     
     static func indexesForRawString(_ string: String, numberOfItems: Int) -> [Int]? {
         
@@ -131,6 +150,8 @@ enum DownloadArgumentValue: String {
             case .last:
                 return [numberOfItems - 1]
             case .sync:
+                fallthrough
+            case .runkeeper:
                 return nil
             }
         }
@@ -226,4 +247,5 @@ class ArgsParser {
     public func hasArgumentOfType(_ type: ArgumentType) -> Bool {
         return self.argumentForType(type) != nil
     }
+    
 }

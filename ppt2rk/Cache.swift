@@ -53,4 +53,39 @@ class Cache {
         
         return url
     }
+    
+    class func cacheHasGPXFile(_ filename: String) -> Bool {
+        
+        guard let dir = self.cachesDirectory() else {
+            return false
+        }
+        
+        let path = dir + "/\(filename).gpx"
+        
+        let fm = FileManager.default
+        
+        return fm.fileExists(atPath: path)
+    }
+    
+    class func cachedGPXDataForFile(_ filename: String) -> Data? {
+        
+        guard self.cacheHasGPXFile(filename) else {
+            return nil
+        }
+        
+        guard let dir = self.cachesDirectory() else {
+            return nil
+        }
+        
+        let path = dir + "/\(filename).gpx"
+        
+        let url = URL(fileURLWithPath: path)
+        
+        do {
+            return try Data(contentsOf: url)
+        }
+        catch {
+            return nil
+        }
+    }
 }

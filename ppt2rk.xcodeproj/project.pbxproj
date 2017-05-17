@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4027CC5A1ED30AF4001E3BFD /* RunkeeperActivityUploadQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4027CC591ED30AF4001E3BFD /* RunkeeperActivityUploadQueue.swift */; };
+		405AC3A61ECC4140005DDAB3 /* Runkeeper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405AC3A51ECC4140005DDAB3 /* Runkeeper.swift */; };
+		405AC3A81ECC52A2005DDAB3 /* Credentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405AC3A71ECC52A2005DDAB3 /* Credentials.swift */; };
+		405AC3AA1ECC5BD6005DDAB3 /* RunkeeperActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405AC3A91ECC5BD6005DDAB3 /* RunkeeperActivity.swift */; };
+		405AC3AC1ECC5C26005DDAB3 /* RunkeeperActivitiesParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405AC3AB1ECC5C26005DDAB3 /* RunkeeperActivitiesParser.swift */; };
+		405AC3AF1ECDD7F1005DDAB3 /* NetworkMultipartRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405AC3AE1ECDD7F1005DDAB3 /* NetworkMultipartRequest.swift */; };
+		405AC3B11ECDEB64005DDAB3 /* RunkeeperGPXUploadParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405AC3B01ECDEB64005DDAB3 /* RunkeeperGPXUploadParser.swift */; };
 		405E6EC51EC4B5A3007CBDE6 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405E6EC41EC4B5A3007CBDE6 /* main.swift */; };
 		405E6ECC1EC4B835007CBDE6 /* Polar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405E6ECB1EC4B835007CBDE6 /* Polar.swift */; };
 		405E6ECE1EC4B842007CBDE6 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405E6ECD1EC4B842007CBDE6 /* Network.swift */; };
@@ -31,6 +38,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4027CC591ED30AF4001E3BFD /* RunkeeperActivityUploadQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RunkeeperActivityUploadQueue.swift; sourceTree = "<group>"; };
+		405AC3A51ECC4140005DDAB3 /* Runkeeper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Runkeeper.swift; sourceTree = "<group>"; };
+		405AC3A71ECC52A2005DDAB3 /* Credentials.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Credentials.swift; sourceTree = "<group>"; };
+		405AC3A91ECC5BD6005DDAB3 /* RunkeeperActivity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RunkeeperActivity.swift; sourceTree = "<group>"; };
+		405AC3AB1ECC5C26005DDAB3 /* RunkeeperActivitiesParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RunkeeperActivitiesParser.swift; sourceTree = "<group>"; };
+		405AC3AE1ECDD7F1005DDAB3 /* NetworkMultipartRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkMultipartRequest.swift; sourceTree = "<group>"; };
+		405AC3B01ECDEB64005DDAB3 /* RunkeeperGPXUploadParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RunkeeperGPXUploadParser.swift; sourceTree = "<group>"; };
 		405E6EC11EC4B5A3007CBDE6 /* ppt2rk */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ppt2rk; sourceTree = BUILT_PRODUCTS_DIR; };
 		405E6EC41EC4B5A3007CBDE6 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		405E6ECB1EC4B835007CBDE6 /* Polar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Polar.swift; sourceTree = "<group>"; };
@@ -54,6 +68,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		405AC3A41ECC4046005DDAB3 /* Runkeeper */ = {
+			isa = PBXGroup;
+			children = (
+				405AC3A51ECC4140005DDAB3 /* Runkeeper.swift */,
+				405AC3AB1ECC5C26005DDAB3 /* RunkeeperActivitiesParser.swift */,
+				405AC3B01ECDEB64005DDAB3 /* RunkeeperGPXUploadParser.swift */,
+				405AC3A91ECC5BD6005DDAB3 /* RunkeeperActivity.swift */,
+				4027CC591ED30AF4001E3BFD /* RunkeeperActivityUploadQueue.swift */,
+			);
+			name = Runkeeper;
+			sourceTree = "<group>";
+		};
+		405AC3AD1ECDD7DE005DDAB3 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				405E6ECD1EC4B842007CBDE6 /* Network.swift */,
+				405AC3AE1ECDD7F1005DDAB3 /* NetworkMultipartRequest.swift */,
+			);
+			name = Network;
+			sourceTree = "<group>";
+		};
 		405E6EB81EC4B5A3007CBDE6 = {
 			isa = PBXGroup;
 			children = (
@@ -74,6 +109,7 @@
 			isa = PBXGroup;
 			children = (
 				405E6ED61EC5C20D007CBDE6 /* Utilities */,
+				405AC3A41ECC4046005DDAB3 /* Runkeeper */,
 				405E6ED51EC5C207007CBDE6 /* Polar */,
 				405E6EC41EC4B5A3007CBDE6 /* main.swift */,
 			);
@@ -93,11 +129,12 @@
 		405E6ED61EC5C20D007CBDE6 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				405AC3AD1ECDD7DE005DDAB3 /* Network */,
 				405E6EE41ECAFA86007CBDE6 /* KeychainPasswordItem.swift */,
-				405E6ECD1EC4B842007CBDE6 /* Network.swift */,
 				405E6ED31EC5BDCD007CBDE6 /* Cache.swift */,
 				405E6ED91EC5E6C2007CBDE6 /* Utilities.swift */,
 				405E6EDB1EC9ACF2007CBDE6 /* ArgsParser.swift */,
+				405AC3A71ECC52A2005DDAB3 /* Credentials.swift */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -160,12 +197,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				405AC3AC1ECC5C26005DDAB3 /* RunkeeperActivitiesParser.swift in Sources */,
 				405E6ECC1EC4B835007CBDE6 /* Polar.swift in Sources */,
 				405E6EC51EC4B5A3007CBDE6 /* main.swift in Sources */,
 				405E6ECE1EC4B842007CBDE6 /* Network.swift in Sources */,
+				405AC3A81ECC52A2005DDAB3 /* Credentials.swift in Sources */,
 				405E6EDC1EC9ACF2007CBDE6 /* ArgsParser.swift in Sources */,
 				405E6ED01EC4B870007CBDE6 /* PolarWorkoutsParser.swift in Sources */,
+				405AC3AF1ECDD7F1005DDAB3 /* NetworkMultipartRequest.swift in Sources */,
+				405AC3A61ECC4140005DDAB3 /* Runkeeper.swift in Sources */,
+				4027CC5A1ED30AF4001E3BFD /* RunkeeperActivityUploadQueue.swift in Sources */,
 				405E6EE51ECAFA86007CBDE6 /* KeychainPasswordItem.swift in Sources */,
+				405AC3AA1ECC5BD6005DDAB3 /* RunkeeperActivity.swift in Sources */,
+				405AC3B11ECDEB64005DDAB3 /* RunkeeperGPXUploadParser.swift in Sources */,
 				405E6ED41EC5BDCD007CBDE6 /* Cache.swift in Sources */,
 				405E6EDA1EC5E6C2007CBDE6 /* Utilities.swift in Sources */,
 				405E6ED21EC5A55B007CBDE6 /* PolarWorkout.swift in Sources */,

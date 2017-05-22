@@ -16,31 +16,31 @@ class Runkeeper {
         
         _ = Network.sendPOSTRequest(.runkeeper, path: "/login", bodyParams: [ "email" : email, "password" : password, "_eventName" : "submit" ], contentType: .form, handler: { (d, e) in
             
-            var username: String? = nil
+            var userID: String? = nil
             
             if let htmlString = d?.utf8String() {
                 
                 if (htmlString.range(of: "<script>window.isUserLoggedIn = \"{User id=") != nil) {
                     
-                    //  username=USERNAME appLanguage=WHATEVER
+                    // <div class="avatarContainer" userId="00000000" userUrl="1234567890">
                     
-                    if let startRange = htmlString.range(of: " email="), let endRange = htmlString.range(of: " name=") {
+                    if let startRange = htmlString.range(of: " userUrl=\""), let endRange = htmlString.range(of: "\">", options: String.CompareOptions.literal, range: startRange.upperBound..<htmlString.endIndex, locale: nil) {
                         
                         if startRange.upperBound < endRange.lowerBound {
                             
-                            let usernameRange = startRange.upperBound..<endRange.lowerBound
+                            let userIDRange = startRange.upperBound..<endRange.lowerBound
                             
-                            username = htmlString.substring(with: usernameRange)
+                            userID = htmlString.substring(with: userIDRange)
                         }
                     }
                 }
             }
             
-            handler(username)
+            handler(userID)
         })
     }
     
-    class func loadActivitiesForUsername(_ username: String, month: Date, handler: @escaping ([RunkeeperActivity]?) -> Void) {
+    class func loadActivitiesForUserID(_ userID: String, month: Date, handler: @escaping ([RunkeeperActivity]?) -> Void) {
         
         let df = DateFormatter()
         df.locale = Locale(identifier: "en_US_POSIX")
@@ -49,16 +49,16 @@ class Runkeeper {
         
         let dateString = df.string(from: month)
         
-        self.loadActivitiesForUsername(username, month: dateString, handler: handler)
+        self.loadActivitiesForUserID(userID, month: dateString, handler: handler)
     }
     
-    class func loadActivitiesForUsername(_ username: String, month: String, handler: @escaping ([RunkeeperActivity]?) -> Void) {
+    class func loadActivitiesForUserID(_ userID: String, month: String, handler: @escaping ([RunkeeperActivity]?) -> Void) {
         
         // https://runkeeper.com/activitiesByDateRange?userName=USERNAME&startDate=Jun-01-2016
         
         print("Getting Runkeeper activities for month beginning \(month)...")
         
-        _ = Network.sendGETRequest(.runkeeper, path: "/activitiesByDateRange?userName=\(username)&startDate=\(month)", contentType: .json, handler: { (d, e) in
+        _ = Network.sendGETRequest(.runkeeper, path: "/activitiesByDateRange?userName=\(userID)&startDate=\(month)", contentType: .json, handler: { (d, e) in
             
             guard let data = d, e == nil else {
                 handler(nil)

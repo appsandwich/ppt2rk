@@ -35,7 +35,7 @@ func printHelp() {
 
 func runApp(polarEmail: String, polarPassword: String, runkeeperEmail: String?, runkeeperPassword: String?, args: ArgsParser) {
     
-    var runkeeperUsername: String? = nil
+    var runkeeperUserID: String? = nil
     
     if let arg = args.argumentForType(.download), let argValue = arg.value, let v = DownloadArgumentValue(rawValue: argValue), v == .runkeeper {
         
@@ -44,16 +44,16 @@ func runApp(polarEmail: String, polarPassword: String, runkeeperEmail: String?, 
             return
         }
         
-        Runkeeper.loginWithEmail(rke, password: rkp, handler: { (username) in
+        Runkeeper.loginWithEmail(rke, password: rkp, handler: { (userID) in
             
-            guard let u = username else {
+            guard let u = userID else {
                 print("Runkeeper login failed.")
                 return
             }
             
-            print("Logged in to Runkeeper as \(u). Waiting for Polar workouts list...")
+            print("Logged in to Runkeeper as user ID \(u). Waiting for Polar workouts list...")
             
-            runkeeperUsername = u
+            runkeeperUserID = u
         })
     }
     
@@ -83,7 +83,7 @@ func runApp(polarEmail: String, polarPassword: String, runkeeperEmail: String?, 
                     
                     // Runkeeper sync
                     
-                    guard let rkUser = runkeeperUsername else {
+                    guard let rkUser = runkeeperUserID else {
                         print("Error: Runkeeper login failed or timed out.")
                         exitWithErrorCode(.loginFailed)
                         return
@@ -101,7 +101,7 @@ func runApp(polarEmail: String, polarPassword: String, runkeeperEmail: String?, 
                     
                     uniqueMonths.forEach({ (month) in
                         
-                        Runkeeper.loadActivitiesForUsername(rkUser, month: month, handler: { (activities) in
+                        Runkeeper.loadActivitiesForUserID(rkUser, month: month, handler: { (activities) in
                             
                             let workoutsForMonth = ws.filter({ (workout) -> Bool in
                                 return workout.runkeeperMonth == month

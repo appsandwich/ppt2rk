@@ -4,10 +4,10 @@
 
 This is a command line tool that will log in to your [polarpersonaltrainer.com](https://polarpersonaltrainer.com) account and let you export all, or some, of your workouts in GPX format.
 
-The end goal with this project is to eventually allow exporting directly to [RunKeeper](https://runkeeper.com). So far, only the Polar to GPX export functionality has been implemented.
+The tool also allows for exporting directly to [RunKeeper](https://runkeeper.com). It will attempt to resolve and sync only Polar activities that do not already exist on Runkeeper, attempting to avoid duplicates if possible.
 
 
-## Usage
+## General Usage
 
 ### Login
 
@@ -58,6 +58,24 @@ Or, hit Return to quit.
 Downloaded GPX files are saved to `~/Library/Caches/ppt2rk/WORKOUTID.gpx`.
 
 
+## Runkeeper Usage
+
+### Login
+
+`./ppt2rk --download runkeeper --email you@emailaddress.com --password yourpolarpassword --rkemail you@emailaddress.com --rkpassword yourrunkeeperpassword`
+
+or
+
+`./ppt2rk -d runkeeper -e you@emailaddress.com -p yourpolarpassword -rke you@emailaddress.com -rkp yourrunkeeperpassword`
+
+
+For an interactive password prompt, omit the `-p` flag:
+
+`./ppt2rk -e you@emailaddress.com -rke you@emailaddress.com`
+
+The tool then operates in `sync` download mode (see below for more info on download modes), but will also upload GPX files to Runkeeper.
+
+
 ### Other Options
 
 #### Download
@@ -76,6 +94,8 @@ Use the `--download` or `-d` flag to bypass the user prompt. This flag supports 
 
 `sync` keeps track of downloaded workouts and only downloads new GPX files as they become available.
 
+`runkeeper` performs the same operation as `sync`, but will also create new activites on the Runkeeper site, using the GPX files downloaded from Polar.
+
 
 #### Keychain
 
@@ -84,6 +104,11 @@ Email and password can be persisted to the Keychain on macOS, using the `--keych
 To save an email and password to the keychain:
 
 `./ppt2rk -e you@emailaddress.com -p yourpolarpassword -k`
+
+This also works for Runkeeper credentials:
+
+`./ppt2rk -e you@emailaddress.com -p yourpolarpassword -rke you@emailaddress.com -rkp yourrunkeeperpassword -k`
+
 
 Subsequent use of the app can drop the credential parameters and the saved details will be used:
 

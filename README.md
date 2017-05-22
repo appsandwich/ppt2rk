@@ -1,4 +1,4 @@
-# Export Polar Data to GPX
+# Export Polar Data to GPX and Runkeeper
 
 ## About
 
@@ -71,7 +71,7 @@ or
 
 For an interactive password prompt, omit the `-p` flag:
 
-`./ppt2rk -e you@emailaddress.com -rke you@emailaddress.com`
+`./ppt2rk -d runkeeper -e you@emailaddress.com -rke you@emailaddress.com`
 
 The tool then operates in `sync` download mode (see below for more info on download modes), but will also upload GPX files to Runkeeper.
 
